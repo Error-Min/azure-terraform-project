@@ -11,3 +11,4 @@ resource "azurerm_virtual_machine_extension" "vmss_web_vm_sc" {
   }
   SETTINGS
 }
+#sh
