@@ -25,7 +25,7 @@ resource "azurerm_lb_backend_address_pool" "bpepool" { # 로벨 백엔드 풀
   name            = "BackEndAddressPool"
 }
 
-resource "azurerm_lb_probe" "vmss" { # 로벨 프로브
+resource "azurerm_lb_probe" "vmss" { # 로벨 프로브s
   resource_group_name = azurerm_resource_group.vmss.name
   loadbalancer_id     = azurerm_lb.vmss.id
   name                = "ssh-running-probe"
