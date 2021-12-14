@@ -2,7 +2,7 @@ resource "azurerm_public_ip" "wlb" {
   name                = "vmss-public-ip"
   location            = azurerm_resource_group.vmss.location
   resource_group_name = azurerm_resource_group.vmss.name
-  allocation_method   = "Static"  #정적 할당
+  allocation_method   = "Static" #정적 할당
   domain_name_label   = random_string.fqdn.result
   tags                = var.tags
 }
@@ -37,16 +37,16 @@ resource "azurerm_lb_rule" "lbnatrule" { # 부하분산 규칙 추가
   loadbalancer_id                = azurerm_lb.vmss.id # NAT 규칙을 생성할 LoadBalancer의 ID
   name                           = "http"
   protocol                       = "Tcp"
-  frontend_port                  = var.application_port # (4) 80번 포트 외부
-  backend_port                   = var.application_port # (4) 80번 포트 외부
+  frontend_port                  = var.application_port                       # (4) 80번 포트 외부
+  backend_port                   = var.application_port                       # (4) 80번 포트 외부
   backend_address_pool_id        = azurerm_lb_backend_address_pool.bpepool.id #백엔드 풀 추가
-  frontend_ip_configuration_name = "PublicIPAddress" # 규칙이 연결된 프런트엔드 IP 구성의 이름
-  probe_id                       = azurerm_lb_probe.vmss.id #상태 프로브 추가
+  frontend_ip_configuration_name = "PublicIPAddress"                          # 규칙이 연결된 프런트엔드 IP 구성의 이름
+  probe_id                       = azurerm_lb_probe.vmss.id                   #상태 프로브 추가
 }
 
 resource "azurerm_virtual_machine_scale_set" "vmss" {
-  name                = "vmscaleset"
-  location            = var.location # (2)
+  name     = "vmscaleset"
+  location = var.location # (2)
   #zones               = 
   resource_group_name = azurerm_resource_group.vmss.name
   upgrade_policy_mode = "Manual"
@@ -63,7 +63,7 @@ resource "azurerm_virtual_machine_scale_set" "vmss" {
     offer     = "CentOS"
     sku       = "7.5"
     version   = "latest"
-    
+
   }
 
   storage_profile_os_disk {
@@ -102,6 +102,7 @@ resource "azurerm_virtual_machine_scale_set" "vmss" {
       primary                                = true
     }
   }
-
   tags = var.vmsstags
 }
+
+
