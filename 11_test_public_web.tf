@@ -45,12 +45,16 @@ resource "azurerm_lb_rule" "lbnatrule" { # 부하분산 규칙 추가
 }
 
 resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
-  name     = "vmscaleset"
-  location = var.location # (2)
-  resource_group_name = azurerm_resource_group.vmss.name
-  sku  = "Standard_DS1_v2"# 머신 디스크 크기 선택 및 vmss 개수 지정 
-  instances = 2 # vmss 가상머신 개수.
-  admin_username      = "adminuser"
+  name                            = "vmscalesetss"
+  location                        = var.location # (2)
+  resource_group_name             = azurerm_resource_group.vmss.name
+  sku                             = "Standard_DS1_v2" # 머신 디스크 크기 선택 및 vmss 개수 지정 
+  instances                       = 2                 # vmss 가상머신 개수.
+  admin_username                  = var.admin_user
+  admin_password                  = var.admin_password
+  disable_password_authentication = false
+  custom_data                     = base64encode("websh.sh")
+  
 
   source_image_reference {
     # VM OS 설정및 변경
@@ -62,7 +66,6 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
   }
 
   os_disk {
-   
     caching           = "ReadWrite" 
     storage_account_type = "Standard_LRS"
   }
@@ -70,7 +73,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
   data_disk {
     lun           = 0
     caching       = "ReadWrite"
-    create_option = "Empty"
+    #create_option = "Empty"
     disk_size_gb  = 10
     storage_account_type = "Standard_LRS"
   }
@@ -87,6 +90,22 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
     }
   }
   tags = var.vmsstags
+
+  extension {
+    name                       = "CustomScript"
+    publisher                  = "Microsoft.Azure.Extensions"
+    type                       = "CustomScript"
+    type_handler_version       = "2.0"
+    auto_upgrade_minor_version = true
+
+    settings = <<SETTINGS
+  {
+      "script": "${filebase64("websh.sh")}"
+  }
+  SETTINGS
+  }
+
+
 }
 
 
