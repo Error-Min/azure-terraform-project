@@ -43,7 +43,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "wasvmss" {
   admin_username                  = "adminuser"
   admin_password                  = "#Rlflqhdl21"
   disable_password_authentication = false
-  #custom_data    = base64encode("websh.sh")
+  custom_data    = base64encode("wassh.sh")
 
   source_image_reference {
     # VM OS 설정및 변경
@@ -78,6 +78,19 @@ resource "azurerm_linux_virtual_machine_scale_set" "wasvmss" {
       primary                                = true
     }
   }
-
   tags = var.vmsstags
+  extension {
+    name                       = "CustomScript"
+    publisher                  = "Microsoft.Azure.Extensions"
+    type                       = "CustomScript"
+    type_handler_version       = "2.0"
+    auto_upgrade_minor_version = true
+
+    settings = <<SETTINGS
+  {
+      "script": "${filebase64("websh.sh")}"
+  }
+  SETTINGS
+  }
+  
 }
