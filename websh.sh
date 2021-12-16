@@ -1,5 +1,5 @@
 #!/bin/bash
-sudo su -
+setenforce 0
 sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
 systemctl disable --now firewalld
 rm -f /etc/localtime
@@ -32,7 +32,7 @@ echo '     </IfModule>' >> /etc/httpd/conf/httpd.conf
 cat > /etc/httpd/conf/workers.properties << EOF
 worker.list=worker1
 worker.worker1.type=ajp13
-worker.worker1.host=[lb internal ip]
+worker.worker1.host=10.0.2.20
 worker.worker1.port=8009
 EOF
 systemctl restart httpd
