@@ -1,19 +1,15 @@
 resource "azurerm_mysql_server" "mysqldb" {
-  name                = "errorminmydb"
+  name                = "smterrordb"
   location            = azurerm_resource_group.vmss.location
   resource_group_name = azurerm_resource_group.vmss.name
 
-  administrator_login          = "sangmin"
-  administrator_login_password = "#Rlflqhdl21"
+  administrator_login          = "sangmin030"
+  administrator_login_password = "!Rlflqhdl21"
 
   sku_name   = "GP_Gen5_2"
   storage_mb = 5120
   version    = "5.7"
-
-  
-  
   ssl_enforcement_enabled           = false
- 
 }
 
 resource "azurerm_mysql_database" "mysqldb" {
